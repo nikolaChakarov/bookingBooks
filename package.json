@@ -1,0 +1,19 @@
+{
+  "name": "mern-portfolio",
+  "version": "1.0.0",
+  "description": "booking books",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikolaChakarov/bookingBooks.git"
+  },
+  "author": "nikola chakarov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nikolaChakarov/bookingBooks/issues"
+  },
+  "homepage": "https://github.com/nikolaChakarov/bookingBooks#readme"
+}
