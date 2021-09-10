@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const BookSchema = new mongoose.Schema({
+    creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+    },
 
     title: {
         type: String,
@@ -15,10 +19,10 @@ const BookSchema = new mongoose.Schema({
         type: Number
     },
 
-    // comments: [{
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'User'
-    // }]
+    comments: [{
+        comment: String,
+        id: String
+    }]
 }, {
     timestamps: true
 });

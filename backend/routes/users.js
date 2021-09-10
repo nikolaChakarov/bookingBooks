@@ -3,7 +3,7 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
-const notAuth = require('../middlewares/notAuth');
+const isAuth = require('../middlewares/isAuth');
 
 
 dotenv.config();
@@ -28,7 +28,7 @@ router.post('/api/register', async (req, res, next) => {
         // json web token
         const token = jwt.sign({
             payload: currentUser
-        }, process.env.SECRET, { expiresIn: '9h' });
+        }, process.env.SECRET, { expiresIn: 36000 });
 
         res.status(200).json({ msg: 'Successfully registration', token });
 
@@ -59,7 +59,7 @@ router.post('/api/login', async (req, res, next) => {
 
         const token = jwt.sign({
             payload: currentUser
-        }, process.env.SECRET, { expiresIn: '9h' });
+        }, process.env.SECRET, { expiresIn: 36000 });
 
         res.status(200).json({ msg: 'Successjully log in', token })
 
@@ -70,7 +70,7 @@ router.post('/api/login', async (req, res, next) => {
 
 });
 
-router.get('/api/collection/:id', notAuth, async (req, res, next) => {
+router.get('/api/collection/:id', isAuth, async (req, res, next) => {
 
     try {
 

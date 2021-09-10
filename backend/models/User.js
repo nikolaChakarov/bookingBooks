@@ -14,14 +14,7 @@ const UserSchema = new mongoose.Schema({
     books: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'book'
-    }],
-
-    comments: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            comment: String
-        }
-    ]
+    }]
 });
 
 const User = mongoose.model('user', UserSchema);

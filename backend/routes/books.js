@@ -3,7 +3,6 @@ const Book = require('../models/Book');
 const User = require('../models/User');
 
 const isAuth = require('../middlewares/isAuth');
-const notAuth = require('../middlewares/notAuth');
 
 router.get('/', (req, res, next) => {
 
@@ -16,6 +15,7 @@ router.post('/api/create', isAuth, async (req, res, next) => {
     try {
 
         const formData = req.body;
+        formData.creator = req.user._id;
 
         const currentUser = await User.findById(req.user._id);
 
@@ -43,7 +43,7 @@ router.post('/api/create', isAuth, async (req, res, next) => {
 });
 
 
-router.put('/api/edit/:id', notAuth, async (req, res, next) => {
+router.put('/api/edit/:id', isAuth, async (req, res, next) => {
 
     let data = req.body;
 
@@ -62,7 +62,7 @@ router.put('/api/edit/:id', notAuth, async (req, res, next) => {
 
 });
 
-router.delete('/api/del/:id', notAuth, async (req, res, next) => {
+router.delete('/api/del/:id', isAuth, async (req, res, next) => {
 
     let data = req.body;
 
@@ -79,6 +79,29 @@ router.delete('/api/del/:id', notAuth, async (req, res, next) => {
         });
     }
 
+});
+
+router.post('/api/comment/:bookId', isAuth, async (req, res, next) => {
+
+    let { comment } = req.body;
+    let currentUserId = req.user._id;
+
+    try {
+
+        const currentBook = await Book.findById(req.params.bookId);
+        currentBook.comments.push({ comment, id: currentUserId });
+        await currentBook.save();
+
+        const comments = currentBook.comments;
+
+        res.status(200).json({ comments });
+
+    } catch (err) {
+        console.error(`${err.message}`.red.bold);
+        res.status(500).json({
+            msg: err.message
+        });
+    }
 });
 
 module.exports = router;
