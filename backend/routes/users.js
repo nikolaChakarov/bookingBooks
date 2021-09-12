@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
 const isAuth = require('../middlewares/isAuth');
+const { check, validationResult } = require('express-validator');
 
 
 dotenv.config();
@@ -30,7 +31,7 @@ router.post('/api/register', async (req, res, next) => {
             payload: currentUser
         }, process.env.SECRET, { expiresIn: 36000 });
 
-        res.status(200).json({ msg: 'Successfully registration', token });
+        res.status(200).json({ id: currentUser._id, username: currentUser.username, token });
 
     } catch (err) {
         console.log(`${err.message}`.red.bold);
@@ -39,7 +40,17 @@ router.post('/api/register', async (req, res, next) => {
 
 });
 
-router.post('/api/login', async (req, res, next) => {
+router.post('/api/login', [
+    check('username', 'Please, enter your username').not().isEmpty(),
+    check('password', 'Please, enter your password').not().isEmpty()
+], async (req, res, next) => {
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        res.status(400).json({ errors: errors.array() });
+        return;
+    }
 
     try {
         const { username, password } = req.body;
@@ -61,7 +72,7 @@ router.post('/api/login', async (req, res, next) => {
             payload: currentUser
         }, process.env.SECRET, { expiresIn: 36000 });
 
-        res.status(200).json({ msg: 'Successjully log in', token })
+        res.status(200).json({ id: currentUser._id, username: currentUser.username, token });
 
     } catch (err) {
         console.log(`${err}`.red.bold);
